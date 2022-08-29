@@ -18,3 +18,8 @@ export type AirportDetailType = {
     name?: string,
     points?: Point,
   }
+
+export type AirportFieldProps = {
+    label: string
+    setAirportDetails: (airportDetails: AirportDetailType | null) => void,
+  }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useGoogleMap, GoogleMap, useLoadScript, MarkerF, PolylineF } from "@react-google-maps/api";
+import { GoogleMap, useLoadScript, MarkerF, PolylineF } from "@react-google-maps/api";
 import '../styles/global.css';
 import { Coordinates } from '../types';
 import { Button } from '@mui/material';
@@ -8,7 +8,7 @@ export default function Map({ sourceCoordinates, destinationCoordinates }: Coord
 
     const [mapRef, setMapRef] = useState(null);
     const { isLoaded } = useLoadScript({
-        googleMapsApiKey: "AIzaSyCFHmPDrLwmka2L2wRvO_v7lz__jg4_7AI",
+        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_KEY,
     });
     if (!isLoaded) return <div>Loading...</div>;
 
@@ -18,8 +18,6 @@ export default function Map({ sourceCoordinates, destinationCoordinates }: Coord
         bounds.extend(destinationCoordinates!)
         map.fitBounds(bounds);
     };
-
-   
     const recenter = () => {
         if (sourceCoordinates && destinationCoordinates){
                fitBounds(mapRef);

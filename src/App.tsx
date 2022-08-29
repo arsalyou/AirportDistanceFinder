@@ -8,8 +8,8 @@ import { Point, AirportDetailType } from './types'
 
 
 function App() {
-  const [srcAirport, setSrcAirport] = useState<AirportDetailType>();
-  const [destinationAirport, setDestinationAirport] = useState<AirportDetailType>()
+  const [srcAirport, setSrcAirport] = useState<AirportDetailType | null>();
+  const [destinationAirport, setDestinationAirport] = useState<AirportDetailType | null>()
   const [dist, setDist] = useState<number>()
   const [showMap, setShowMap] = useState(false);
   const [btnEanble, setBtnEnable] = useState(false);
@@ -45,6 +45,8 @@ function App() {
       let miles = 0.53996 * calculatedKM;
       setDist(Math.round(miles))
       setShowMap(true);
+    }else{
+      console.log('fields cant be empty')
     }
   }
 
