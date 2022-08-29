@@ -1,23 +1,15 @@
 import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import InputField from './components/InputField'
-import Test from './components/Test'
 import SearchField from './components/SearchField'
-import Button from '@mui/material/Button';
-import Map from './components/Map'
-import Home from './components/Home'
+import {Stack, Button} from '@mui/material';
+import Map from './components/Map';
+import {Point, AirportDetailType} from './types'
 
-type AirportDetailType = {
-  name: string,
-  latitude: number,
-  longitude: number
-}
 
 function App() {
-  const [count, setCount] = useState(0)
   const [srcAirport, setSrcAirport] = useState<AirportDetailType>();
   const [destinationAirport, setDestinationAirport] = useState<AirportDetailType>()
   const [dist, setDist] = useState<number>()
+  const [showMap, setShowMap] = useState(false);
 
   function distance(lat1: number, lon1: number, lat2: number, lon2: number) {
     var p = 0.017453292519943295;    // Math.PI / 180
@@ -34,21 +26,35 @@ function App() {
   },[srcAirport])
 
   const findDistance = () => {
-    const calculatedKM = distance(srcAirport?.latitude, srcAirport?.longitude, destinationAirport?.latitude, destinationAirport?.longitude)
+    if (srcAirport && destinationAirport){
+      let srcCoordinate  = srcAirport.points;
+      let destCoordinate = destinationAirport.points;
+      console.log(srcAirport)
+    const calculatedKM = distance(srcCoordinate!.lat, srcCoordinate!.lng, destCoordinate!.lat, destCoordinate!.lng)
     let miles = 0.53996 * calculatedKM;
     setDist(miles)
-    
+    setShowMap(true);
+    }
   }
 
   return (
     <div>
-      
+<Stack
+  direction={{ xs: 'column', sm: 'row' }}
+  spacing={{ xs: 1, sm: 2, md: 4 }}
+>
       <SearchField label='source' setAirportDetails={setSrcAirport}/>
       <SearchField label='destination' setAirportDetails={setDestinationAirport}/>
       <Button onClick={findDistance}>Find Distance</Button>
+      </Stack>
       <h3>{dist}</h3>
-      <Home/>
-      
+    {
+      showMap && 
+      <Map sourceCoordinates={srcAirport?.points} destinationCoordinates={destinationAirport?.points}/>
+
+}
+
+
     </div>
   )
 }

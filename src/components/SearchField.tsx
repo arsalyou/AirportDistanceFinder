@@ -4,16 +4,11 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
 import axios from 'axios';
+import { AirportDetailType } from '../types';
 
 const filterOptions = createFilterOptions({
     stringify: (option) => option.name,
   });
-
-  type AirportDetailType = {
-    name: string,
-    latitude: number,
-    longitude: number
-  }
 
   type AirportFieldProps = {
     label: string
@@ -42,8 +37,11 @@ const filterOptions = createFilterOptions({
       const temp = data?.map(item => {
         return ({
           'name': item.name,
-          'latitude': item.latitude,
-          'longitude': item.longitude
+          'points': 
+          {
+          'lat': parseFloat(item.latitude),
+          'lng': parseFloat(item.longitude)
+          }
       })})
       console.log(temp)
       if (temp){
@@ -51,10 +49,9 @@ const filterOptions = createFilterOptions({
       }else{
         setOptions([]);
       }
-      
     };
   
-    React.useEffect(() => {
+    useEffect(() => {
       if (!open) {
         setOptions([]);
       }
@@ -64,8 +61,6 @@ const filterOptions = createFilterOptions({
       <Autocomplete
         id="asynchronous-demo"
         filterOptions={filterOptions}
-  
-        style={{ width: 300 }}
         open={open}
         onOpen={() => {
           setOpen(true);
