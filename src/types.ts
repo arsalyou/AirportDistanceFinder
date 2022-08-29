@@ -20,6 +20,26 @@ export type AirportDetailType = {
   }
 
 export type AirportFieldProps = {
-    label: string
+    name: string
     setAirportDetails: (airportDetails: AirportDetailType | null) => void,
+}
+
+type country = {
+    name: string,
+    iso: string
   }
+ type state =  {
+    name: string,
+    abbr: string,
+    type: string
+  }
+
+export type AirportResponse = {
+        name: string,
+        city: string,
+        iata: string,
+        latitude: string,
+        longitude: string,
+        country: country ,
+        state: state
+}

@@ -6,13 +6,14 @@ import { Button } from '@mui/material';
 
 export default function Map({ sourceCoordinates, destinationCoordinates }: Coordinates) {
 
-    const [mapRef, setMapRef] = useState(null);
+    const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
     const { isLoaded } = useLoadScript({
-        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_KEY,
+        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_KEY!,
+
     });
     if (!isLoaded) return <div>Loading...</div>;
 
-    const fitBounds = (map) => {
+    const fitBounds = (map: google.maps.Map) => {
         const bounds = new window.google.maps.LatLngBounds();
         bounds.extend(sourceCoordinates!)
         bounds.extend(destinationCoordinates!)
@@ -20,7 +21,7 @@ export default function Map({ sourceCoordinates, destinationCoordinates }: Coord
     };
     const recenter = () => {
         if (sourceCoordinates && destinationCoordinates){
-               fitBounds(mapRef);
+               fitBounds(mapRef!);
          }
     };
     // useEffect(()=>{
@@ -38,7 +39,8 @@ export default function Map({ sourceCoordinates, destinationCoordinates }: Coord
         zIndex: 1
     };
 
-    const loadHandler = (map) => {
+    const loadHandler = (map: google.maps.Map ) => {
+        console.log(typeof map)
         setMapRef(map);
         fitBounds(map);
     };
@@ -53,7 +55,6 @@ export default function Map({ sourceCoordinates, destinationCoordinates }: Coord
                         <MarkerF position={sourceCoordinates!} />
                         <MarkerF position={destinationCoordinates!} />
                         {<PolylineF options={options} path={[sourceCoordinates!, destinationCoordinates!]} />}
-                        {/* <PolylineF options={options} path={path} /> */}
                     </GoogleMap>
                 </>
             )

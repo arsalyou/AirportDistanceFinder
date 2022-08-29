@@ -3,13 +3,13 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
-import axios from 'axios';
-import { AirportFieldProps } from '../types';
+import axios, {AxiosResponse} from 'axios';
+import { AirportFieldProps, AirportResponse, AirportDetailType } from '../types';
 import DisplayMessage from './DisplayMessage';
 
 
 
-export default function SearchField({ label, setAirportDetails }: AirportFieldProps) {
+export default function SearchField({ name, setAirportDetails }: AirportFieldProps) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [error, setError] = useState('');
@@ -17,25 +17,26 @@ export default function SearchField({ label, setAirportDetails }: AirportFieldPr
   const ALPHA_NUMERIC_DASH_REGEX = /^[a-zA-Z ]*$/;
 
   const filterOptions = createFilterOptions({
-    stringify: (option) => option.name,
+    stringify: (option : AirportDetailType) => option.name!,
   });
 
   const [options, setOptions] = React.useState([]);
   const loading = open && options?.length === 0;
 
-  const onChangeHandle = async (value) => {
+  const onChangeHandle = async (value : any) => {
     try {
       const res = await axios({
         method: 'POST',
         url: `https://www.air-port-codes.com/api/v1/multi?term=${value}`,
         headers: {
-          'APC-Auth': process.env.REACT_APP_API_Key,
-          'APC-Auth-Secret': process.env.REACT_APP_API_Secret
+          
+          'APC-Auth': process.env.REACT_APP_API_Key!,
+          'APC-Auth-Secret': process.env.REACT_APP_API_Secret!
         }
       });
       const data = res?.data?.airports;
       console.log(res);
-      const temp = data?.map(item => {
+      const temp = data?.map((item: AirportResponse) => {
         return ({
           'name': item.name,
           'points':
@@ -52,16 +53,14 @@ export default function SearchField({ label, setAirportDetails }: AirportFieldPr
         setOptions([]);
       }
       setShowError(false)
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       setError(err);
       setShowError(true);
       let timer: ReturnType<typeof setTimeout> = setTimeout(() => { 
         setShowError(false);
        }, 2000);
-
       clearTimeout(timer);
-
     }
   };
 
@@ -78,18 +77,18 @@ export default function SearchField({ label, setAirportDetails }: AirportFieldPr
         open={open}
         onOpen={() => { setOpen(true); }}
         onClose={() => { setOpen(false); }}
-        isOptionEqualToValue={(option, value) => {
-          option.name === value.name;
-          // improve set only once 
+        isOptionEqualToValue={(option : AirportDetailType, value: AirportDetailType ) => {
           setAirportDetails(value)
+          return option.name === value.name;
+          // improve set only once 
         }}
-        getOptionLabel={(option) => option.name}
+        getOptionLabel={(option : AirportDetailType) => option.name!}
         options={options}
         loading={loading}
         renderInput={(params) => (
           <TextField
             {...params}
-            label={label}
+            label={name}
             variant="outlined"
             fullWidth
             onKeyDown={(event) => {

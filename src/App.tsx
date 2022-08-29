@@ -54,8 +54,8 @@ function App() {
       <Stack  sx={{ m:2}} spacing={{ xs: 1, sm: 2, md: 4 }}>
       <Header />
       <Stack sx={{flex: 1}} direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 4 }}>
-        <SearchField label='source' setAirportDetails={setSrcAirport} />
-        <SearchField label='destination' setAirportDetails={setDestinationAirport} />
+        <SearchField name='source' setAirportDetails={setSrcAirport} />
+        <SearchField name='destination' setAirportDetails={setDestinationAirport} />
         <Button disabled={!btnEanble} variant="contained" sx={{ minWidth:180 }} onClick={findDistance}>Find Distance</Button>
       </Stack>
       
