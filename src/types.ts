@@ -1,3 +1,8 @@
+export type MsgProps = {
+    message: string,
+    show: boolean
+}
+
 export type Point =  {
     lat: number,
     lng: number

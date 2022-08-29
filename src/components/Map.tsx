@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGoogleMap, GoogleMap, useLoadScript, MarkerF, PolylineF } from "@react-google-maps/api";
 import '../styles/global.css';
 import { Coordinates } from '../types';
-
+import { Button } from '@mui/material';
 
 export default function Map({ sourceCoordinates, destinationCoordinates }: Coordinates) {
 
@@ -10,36 +10,33 @@ export default function Map({ sourceCoordinates, destinationCoordinates }: Coord
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: "AIzaSyCFHmPDrLwmka2L2wRvO_v7lz__jg4_7AI",
     });
-    //console.log(isLoaded);
     if (!isLoaded) return <div>Loading...</div>;
 
     const fitBounds = (map) => {
         const bounds = new window.google.maps.LatLngBounds();
-        bounds.extend(sourceCoordinates)
-        bounds.extend(destinationCoordinates)
-        // myPlaces.map(place => {
-        //     bounds.extend(place.pos);
-        //     return place.id;
-        // });
+        bounds.extend(sourceCoordinates!)
+        bounds.extend(destinationCoordinates!)
         map.fitBounds(bounds);
     };
-    const path = [
-        { lat: 44, lng: -80 },
-        { lat: 21.291, lng: -157.821 },
 
-    ];
+   
+    const recenter = () => {
+        if (sourceCoordinates && destinationCoordinates){
+               fitBounds(mapRef);
+         }
+    };
+    // useEffect(()=>{
+    //     if (sourceCoordinates && destinationCoordinates){
+    //         fitBounds(mapRef);
+    //     }
+    // },[sourceCoordinates, destinationCoordinates])
 
     const options = {
         strokeColor: '#FF0000',
-        strokeOpacity: 0.8,
-        strokeWeight: 12,
+        strokeWeight: 3,
         fillColor: '#FF0000',
         fillOpacity: 0.35,
         radius: 30000,
-        paths: [
-            sourceCoordinates,
-            destinationCoordinates,
-        ],
         zIndex: 1
     };
 
@@ -52,8 +49,8 @@ export default function Map({ sourceCoordinates, destinationCoordinates }: Coord
         !isLoaded ? (<p>Loading </p>)
             :
             (
-
                 <>
+                <Button onClick={recenter} >Recenter</Button>
                     <GoogleMap onLoad={loadHandler} mapContainerClassName="map-container">
                         <MarkerF position={sourceCoordinates!} />
                         <MarkerF position={destinationCoordinates!} />
