@@ -3,7 +3,7 @@ import SearchField from './components/SearchField'
 import { Stack, Button } from '@mui/material';
 import Map from './components/Map';
 import Header from './components/Header';
-import {  AirportDetailType } from './types'
+import {  AirportDetailType } from './types';
 import { calculateDistance } from './utils/util';
 
 function App() {
