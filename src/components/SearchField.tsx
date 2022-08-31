@@ -3,11 +3,9 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
-import axios, {AxiosResponse} from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { AirportFieldProps, AirportResponse, AirportDetailType } from '../types';
 import DisplayMessage from './DisplayMessage';
-
-
 
 export default function SearchField({ name, setAirportDetails }: AirportFieldProps) {
   const [open, setOpen] = useState(false);
@@ -17,50 +15,61 @@ export default function SearchField({ name, setAirportDetails }: AirportFieldPro
   const ALPHA_NUMERIC_DASH_REGEX = /^[a-zA-Z ]*$/;
 
   const filterOptions = createFilterOptions({
-    stringify: (option : AirportDetailType) => option.name!,
+    stringify: (option: AirportDetailType) => option.name!,
   });
 
   const [options, setOptions] = React.useState([]);
   const loading = open && options?.length === 0;
 
-  const onChangeHandle = async (value : any) => {
+  const showSnackBar = (errMsg: string) => {
+    setError(errMsg)
+    setShowError(true);
+    let timer: ReturnType<typeof setTimeout> = setTimeout(() => {
+      setShowError(false);
+      clearTimeout(timer);
+    }, 3000);
+  }
+
+  const onChangeHandle = async (value: any) => {
     try {
+      console.log(import.meta.env.VITE_API_Key);
       const res = await axios({
         method: 'POST',
         url: `https://www.air-port-codes.com/api/v1/multi?term=${value}`,
         headers: {
-          
-          'APC-Auth': process.env.REACT_APP_API_Key!,
-          'APC-Auth-Secret': process.env.REACT_APP_API_Secret!
+          'APC-Auth': import.meta.env.VITE_API_Key!,
+          'APC-Auth-Secret': import.meta.env.VITE_API_Secret!
         }
       });
-      const data = res?.data?.airports;
-      console.log(res);
-      const temp = data?.map((item: AirportResponse) => {
-        return ({
-          'name': item.name,
-          'points':
-          {
-            'lat': parseFloat(item.latitude),
-            'lng': parseFloat(item.longitude)
-          }
+      if (res?.data?.statusCode == 200) {
+        const data = res?.data?.airports;
+        console.log(res);
+        const temp = data?.map((item: AirportResponse) => {
+          return ({
+            'name': item.name,
+            'points':
+            {
+              'lat': parseFloat(item.latitude),
+              'lng': parseFloat(item.longitude)
+            }
+          })
         })
-      })
-      console.log(temp)
-      if (temp) {
-        setOptions(temp);
-      } else {
-        setOptions([]);
+        console.log(temp)
+        if (temp) {
+          setOptions(temp);
+        } else {
+          setOptions([]);
+        }
+        setShowError(false)
+
+      }else{
+        showSnackBar(res?.data?.message);
+        setShowError(true);
       }
-      setShowError(false)
+
     } catch (err: any) {
       console.log(err);
-      setError(err);
-      setShowError(true);
-      let timer: ReturnType<typeof setTimeout> = setTimeout(() => { 
-        setShowError(false);
-       }, 2000);
-      clearTimeout(timer);
+      showSnackBar(err?.message);
     }
   };
 
@@ -77,12 +86,12 @@ export default function SearchField({ name, setAirportDetails }: AirportFieldPro
         open={open}
         onOpen={() => { setOpen(true); }}
         onClose={() => { setOpen(false); }}
-        isOptionEqualToValue={(option : AirportDetailType, value: AirportDetailType ) => {
+        isOptionEqualToValue={(option: AirportDetailType, value: AirportDetailType) => {
           setAirportDetails(value)
           return option.name === value.name;
           // improve set only once 
         }}
-        getOptionLabel={(option : AirportDetailType) => option.name!}
+        getOptionLabel={(option: AirportDetailType) => option.name!}
         options={options}
         loading={loading}
         renderInput={(params) => (
@@ -99,15 +108,16 @@ export default function SearchField({ name, setAirportDetails }: AirportFieldPro
             sx={{ minWidth: 300 }}
             onChange={(ev) => {
               setQuery(ev.target.value)
-              if (ev.target.value === ""){
+              if (ev.target.value === "") {
                 setAirportDetails(null);
               }
-              if ((ev.target.value !== "" || ev.target.value !== null ) && ev.target.value.length > 2) {
+              if ((ev.target.value !== "" || ev.target.value !== null) && ev.target.value.length > 2) {
                 console.log(ev.target.value)
                 onChangeHandle(ev.target.value);
               }
             }}
             InputProps={{
+              spellCheck: true,
               ...params.InputProps,
               endAdornment: (
                 <React.Fragment>
@@ -120,7 +130,8 @@ export default function SearchField({ name, setAirportDetails }: AirportFieldPro
           />
         )}
       />
-      <DisplayMessage show={showError} message={error}/>
+      <DisplayMessage show={showError} message={error} />
+      {/* <DisplayMessage show={true} message="sdsdsd" /> */}
 
     </>
   );

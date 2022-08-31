@@ -25,12 +25,12 @@ function App() {
   }
 
   useEffect(() => {
-    if(!srcAirport && !destinationAirport){
+    if (!srcAirport && !destinationAirport) {
       setShowMap(false);
     }
-    if (srcAirport && destinationAirport){
+    if (srcAirport && destinationAirport) {
       setBtnEnable(true);
-    }else{
+    } else {
       setBtnEnable(false);
     }
 
@@ -45,29 +45,28 @@ function App() {
       let miles = 0.53996 * calculatedKM;
       setDist(Math.round(miles))
       setShowMap(true);
-    }else{
+    } else {
       console.log('fields cant be empty')
     }
   }
 
   return (
-      <Stack  sx={{ m:2}} spacing={{ xs: 1, sm: 2, md: 4 }}>
+    <Stack sx={{ m: 2,  }}  spacing={{ xs: 1, sm: 2, md: 4 }}>
       <Header />
-      <Stack sx={{flex: 1}} direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 4 }}>
+      <Stack sx={{ flex: 1, display: 'flex', justifyContent: 'center' }} direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 4 }}>
         <SearchField name='source' setAirportDetails={setSrcAirport} />
         <SearchField name='destination' setAirportDetails={setDestinationAirport} />
-        <Button disabled={!btnEanble} variant="contained" sx={{ minWidth:180 }} onClick={findDistance}>Find Distance</Button>
+        <Button disabled={!btnEanble} variant="contained" sx={{ minWidth: 180 }} onClick={findDistance}>Find Distance</Button>
       </Stack>
-      
       {
         showMap &&
-        <>
-        <h4>{`${dist} nautical miles is the distance from ${srcAirport?.name} to ${destinationAirport?.name}`}</h4>
-        <Map sourceCoordinates={srcAirport?.points} destinationCoordinates={destinationAirport?.points} />
-        </>
-        
+        <Stack sx={{  display: 'flex', justifyContent: 'center', alignItems:'center' }}  spacing={1}>
+          <h4>{`${dist} nautical miles is the distance from ${srcAirport?.name} to ${destinationAirport?.name}`}</h4>
+          <Map sourceCoordinates={srcAirport?.points} destinationCoordinates={destinationAirport?.points} />
+        </Stack>
+
       }
-      </Stack>
+    </Stack>
   )
 }
 

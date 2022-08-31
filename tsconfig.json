@@ -17,6 +17,6 @@
     "jsx": "react-jsx",
     "types": ["node"]
   },
-  "include": ["src", "interfaces.ts"],
+  "include": ["src", "interfaces.ts", "keys.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

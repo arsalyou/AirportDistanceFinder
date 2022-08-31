@@ -8,7 +8,7 @@ export default function Map({ sourceCoordinates, destinationCoordinates }: Coord
 
     const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
     const { isLoaded } = useLoadScript({
-        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_KEY!,
+        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_KEY,
 
     });
     if (!isLoaded) return <div>Loading...</div>;
@@ -50,7 +50,7 @@ export default function Map({ sourceCoordinates, destinationCoordinates }: Coord
             :
             (
                 <>
-                <Button onClick={recenter} >Recenter</Button>
+                <Button variant="contained" sx = {{width: 100}} onClick={recenter} >Recenter</Button>
                     <GoogleMap onLoad={loadHandler} mapContainerClassName="map-container">
                         <MarkerF position={sourceCoordinates!} />
                         <MarkerF position={destinationCoordinates!} />
