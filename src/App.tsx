@@ -19,9 +19,11 @@ function App() {
     }
     if (srcAirport && destinationAirport) {
       setBtnEnable(true);
+      console.log('btn enabled');
     } else {
       setBtnEnable(false);
     }
+    console.log(srcAirport, destinationAirport);
 
   }, [srcAirport, destinationAirport])
 

@@ -20,6 +20,7 @@ export default function SearchField({ name, setAirportDetails }: AirportFieldPro
 
   const [options, setOptions] = React.useState([]);
   const loading = open && options?.length === 0;
+  
 
   const showSnackBar = (errMsg: string) => {
     setError(errMsg)
