@@ -24,6 +24,7 @@ function App() {
       setBtnEnable(false);
     }
     console.log(srcAirport, destinationAirport);
+    console.log('btn updated');
 
   }, [srcAirport, destinationAirport])
 
