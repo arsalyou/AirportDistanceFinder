@@ -32,7 +32,6 @@ export default function SearchField({ name, setAirportDetails }: AirportFieldPro
   }
   const onChangeHandle = async (value: any) => {
     try {
-      console.log(import.meta.env.VITE_API_Key);
       const res = await axios({
         method: 'POST',
         url: `https://www.air-port-codes.com/api/v1/multi?term=${value}`,
