@@ -25,6 +25,7 @@ function App() {
     }
     console.log(srcAirport, destinationAirport);
     console.log('btn updated');
+    findDistance();
 
   }, [srcAirport, destinationAirport])
 
@@ -48,7 +49,7 @@ function App() {
       <Stack sx={{ flex: 1, display: 'flex', justifyContent: 'center' }} direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 4 }}>
         <SearchField name='source' setAirportDetails={setSrcAirport} />
         <SearchField name='destination' setAirportDetails={setDestinationAirport} />
-        <Button disabled={!btnEanble} variant="contained" sx={{ minWidth: 180 }} onClick={findDistance}>Find Distance</Button>
+        {/* <Button disabled={!btnEanble} variant="contained" sx={{ minWidth: 180 }} onClick={findDistance}>Find Distance</Button> */}
       </Stack>
       {
         showMap && srcAirport && destinationAirport &&

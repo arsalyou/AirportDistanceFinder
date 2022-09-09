@@ -111,7 +111,7 @@ export default function SearchField({ name, setAirportDetails }: AirportFieldPro
                 event.preventDefault();
               }
             }}
-            sx={{ minWidth: 300 }}
+            sx={{ minWidth: 350 }}
             onChange={(ev) => {
               setQuery(ev.target.value)
               if (ev.target.value === "") {
