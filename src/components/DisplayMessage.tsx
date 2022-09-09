@@ -14,10 +14,6 @@ export default function DisplayMessage({ message, show }: MsgProps) {
   });
   const { vertical, horizontal, open } = state;
 
-  const handleClick = (newState: SnackbarOrigin) => () => {
-    setState({ open: true, ...newState });
-  };
-
   const handleClose = () => {
     setState({ ...state, open: false });
   };
