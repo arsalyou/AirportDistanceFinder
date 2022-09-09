@@ -86,9 +86,15 @@ export default function SearchField({ name, setAirportDetails }: AirportFieldPro
         open={open}
         onOpen={() => { setOpen(true); }}
         onClose={() => { setOpen(false); }}
-        isOptionEqualToValue={(option: AirportDetailType, value: AirportDetailType) => {
+        onChange={(event, value) => {
+          console.log(value)
           setAirportDetails(value)
-          return option.name === value.name;
+        }} // prints the selected value
+        isOptionEqualToValue={(option: AirportDetailType, value: AirportDetailType) => {
+          if(option.name == value.name){
+            setAirportDetails(value)
+          }
+          return option.name == value.name;
           // improve set only once 
         }}
         getOptionLabel={(option: AirportDetailType) => option.name!}
