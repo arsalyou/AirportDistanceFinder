@@ -11,6 +11,8 @@ export default function SearchField({ name, setAirportDetails }: AirportFieldPro
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [error, setError] = useState('');
+  const [options, setOptions] = useState([]);
+
   const [showError, setShowError] = useState(false);
   const ALPHA_NUMERIC_DASH_REGEX = /^[a-zA-Z ]*$/;
 
@@ -18,7 +20,6 @@ export default function SearchField({ name, setAirportDetails }: AirportFieldPro
     stringify: (option: AirportDetailType) => option.name!,
   });
 
-  const [options, setOptions] = React.useState([]);
   const loading = open && options?.length === 0;
   
 
